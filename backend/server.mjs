@@ -8,7 +8,7 @@ import errorHandler from './modules/middleware/error/errorHandler.js';
 import createHttpsServer from './serverhttps.mjs';
 
 const app = express();
-const port = 5000;
+const port = 443;
 
 app.use(cors());
 // Middleware to handle JSON requests
@@ -47,6 +47,6 @@ app.use(errorHandler);
 //     console.log(`Server is running at http://localhost:${port}`);
 // });
 const httpsServer = createHttpsServer(app);
-httpsServer.listen(5000, () => {
+httpsServer.listen(port, () => {
     console.log('Server is running at https://localhost:5000');
 });
