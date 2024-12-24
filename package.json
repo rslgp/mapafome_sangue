@@ -2,6 +2,7 @@
   "name": "my-react-app",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://rslgp.github.io/mapafome_sangue",
   "type": "module",
   "scripts": {
     "backend": "nodemon ./backend/server.mjs",

@@ -7,5 +7,5 @@ export default defineConfig({
   plugins: [
     react(),
   ],
-  base: 'https://github.com/rslgp/mapafome_sangue'
+  base: 'https://raw.githubusercontent.com/rslgp/mapafome_sangue/refs/heads/gh-pages'
 })
