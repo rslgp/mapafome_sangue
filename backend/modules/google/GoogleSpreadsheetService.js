@@ -77,7 +77,7 @@ class GoogleSheetService {
 
     // UPDATE - Update an existing row (based on a column value)
     async updateRow(filterValue, updateData, args) {
-        const { user_pass, iv } = args;
+        const { user_pass, iv, tempo_atualizacao } = args;
         console.log(updateData);
         const sheet = await this.accessSheet();
         console.log("sheet", sheet)
@@ -105,6 +105,8 @@ class GoogleSheetService {
         }
 
         if (row) {
+            updateData.tempo_atualizacao = tempo_atualizacao;
+            console.log(updateData);
             row.assign(updateData);
             await row.save();
             console.log('Row updated:', row_result);

@@ -88,13 +88,15 @@ const BloodTypeToggle = () => {
     const dataToSend = {
       iv,
       ...loginData,
-      bloodTypes: selectedBloodTypes
+      bloodTypes: selectedBloodTypes,
+      tempo_atualizacao: Date.now()
     };
     console.log(dataToSend);
     console.log("oi");
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_BACKEND_ENDPOINT}/submit`, dataToSend);
       console.log('Response:', response);
+      alert("envio com sucesso");
     } catch (error) {
       if (error.status === 403) alert("senha errada");
       console.error('Error submitting data:', error);
