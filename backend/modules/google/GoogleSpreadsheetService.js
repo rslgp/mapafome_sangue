@@ -5,7 +5,7 @@ import { GoogleSpreadsheet } from 'google-spreadsheet';
 import { JWT } from 'google-auth-library';
 import google_creds from './service_account_snet-404216-828f4810e5c3.json' with { "type": "json" }
 
-import AesEncryption from "../../../_shared/util/aes_encryption.js";
+import AesEncryption from "../privacy/aes_encryption.js";
 const aes = new AesEncryption(process.env.VITE_API_CRYPTSEED + "F");
 
 const serviceAccountAuth = new JWT({
