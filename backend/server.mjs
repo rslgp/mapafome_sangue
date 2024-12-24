@@ -5,6 +5,7 @@ import cors from 'cors';
 import GoogleSheetService from './modules/google/GoogleSpreadsheetService.js'
 
 import errorHandler from './modules/middleware/error/errorHandler.js';
+import createHttpsServer from './serverhttps.mjs';
 
 const app = express();
 const port = 5000;
@@ -42,6 +43,10 @@ app.get('/mapdata', async (req, res, next) => {
 app.use(errorHandler);
 
 // Start the server
-app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+// app.listen(port, () => {
+//     console.log(`Server is running at http://localhost:${port}`);
+// });
+const httpsServer = createHttpsServer(app);
+httpsServer.listen(5000, () => {
+    console.log('Server is running at https://localhost:5000');
 });
