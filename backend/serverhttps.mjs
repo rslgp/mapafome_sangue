@@ -4,8 +4,8 @@ import https from 'https';
 const createHttpsServer = (app) => {
     // Paths to your SSL certificates
     const sslOptions = {
-        key: fs.readFileSync('/etc/letsencrypt/live/sangue.mapafome.com.br/privkey.pem'),
-        cert: fs.readFileSync('/etc/letsencrypt/live/sangue.mapafome.com.br/fullchain.pem'),
+        key: fs.readFileSync('./cert/privkey.pem'), // domain sangue.mapafome.com.br
+        cert: fs.readFileSync('./cert/fullchain.pem'),
     };
 
     // Create an HTTPS server with the provided app and SSL options
