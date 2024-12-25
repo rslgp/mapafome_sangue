@@ -36,7 +36,6 @@ class GoogleSheetService {
 
     // Set up and authenticate the Google Spreadsheet
     async setup(ss_id = this.SPREADSHEET_ID) {
-        if (this.doc && ss_id === this.SPREADSHEET_ID) return; // Avoid reinitializing if already initialized
         this.SPREADSHEET_ID = ss_id;
         this.doc = new GoogleSpreadsheet(ss_id, serviceAccountAuth);
         await this.doc.loadInfo();
