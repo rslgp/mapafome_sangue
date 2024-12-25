@@ -94,7 +94,7 @@ const BloodTypeToggle = () => {
     console.log(dataToSend);
     console.log("oi");
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_BACKEND_ENDPOINT}/submit`, dataToSend);
+      const response = await axios.post(`${import.meta.env.VITE_API_BACKEND_ENDPOINT}?func=submit`, dataToSend);
       console.log('Response:', response);
       alert("envio com sucesso");
     } catch (error) {
