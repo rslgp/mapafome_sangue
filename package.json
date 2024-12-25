@@ -2,7 +2,7 @@
   "name": "my-react-app",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://rslgp.github.io/mapafome_sangue",
+  "homepage": "https://sangue.mapafome.com.br",
   "type": "module",
   "scripts": {
     "backend": "nodemon ./backend/server.mjs",
@@ -11,7 +11,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "npm run build && gh-pages -d dist"
+    "deploy": "npm run build && echo sangue.mapafome.com.br > ./build/CNAME && gh-pages -d dist"
   },
   "dependencies": {
     "axios": "^1.7.9",
