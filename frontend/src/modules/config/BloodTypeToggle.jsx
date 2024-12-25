@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import {
-  Switch, FormControlLabel, Box, Typography, Paper, TextField, Button, CssBaseline, ThemeProvider, createTheme, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
+  Switch, FormControlLabel, Box, Typography, Paper, TextField, Button, CssBaseline, ThemeProvider, createTheme, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Snackbar, Alert
 } from '@mui/material';
 
 const vite_env = import.meta.env;
@@ -42,6 +42,8 @@ const BloodTypeToggle = () => {
   });
   const [loginData, setFormData] = useState({ username: '', password: '' });
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [toastOpen, setToastOpen] = useState(false); // State for Snackbar
+  const [toastMessage, setToastMessage] = useState(""); // Toast message content
 
   useEffect(() => {
     const savedBloodTypes = JSON.parse(sessionStorage.getItem(enum_input.blood));
@@ -91,24 +93,29 @@ const BloodTypeToggle = () => {
       const response = await fetch(`${import.meta.env.VITE_API_BACKEND_ENDPOINT}?func=submit`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json', // Set the appropriate headers
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(dataToSend), // Convert the data to a JSON string
+        body: JSON.stringify(dataToSend),
       });
 
-      // Check if the response is successful
       if (!response.ok) {
+        if (response.status === 403) {
+          setToastMessage("Wrong password. Please try again.");
+          setToastOpen(true); // Show Snackbar for wrong password
+        }
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      // Parse the response JSON
       const responseData = await response.json();
       console.log(responseData);
       alert("envio com sucesso");
     } catch (error) {
-      if (error.status === 403) alert("senha errada");
       console.error('Error submitting data:', error);
     }
+  };
+
+  const handleToastClose = () => {
+    setToastOpen(false); // Close the Snackbar
   };
 
   const theme = createTheme({
@@ -117,7 +124,6 @@ const BloodTypeToggle = () => {
     },
   });
 
-  // Function to get donors based on selected blood types
   const getDonorList = () => {
     return Object.entries(selectedBloodTypes).map(([bloodType, isLowOnReserve]) => {
       if (isLowOnReserve) {
@@ -185,53 +191,20 @@ const BloodTypeToggle = () => {
               Submit
             </Button>
           </Box>
-
-          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 3, marginTop: 3 }}>
-            {bloodTypes.map(({ type, color }) => (
-              <FormControlLabel
-                key={type}
-                control={
-                  <Switch
-                    checked={selectedBloodTypes[type]}
-                    onChange={() => handleBloodToggle(type)}
-                    color="primary"
-                    sx={{
-                      '& .MuiSwitch-thumb': { backgroundColor: color },
-                      '& .MuiSwitch-track': { backgroundColor: color },
-                    }}
-                  />
-                }
-                label={type}
-              />
-            ))}
-          </Box>
         </Paper>
 
         {getDonorList()}
 
-        <Typography variant="h5" gutterBottom>
-          Compatible Blood Types for Donation
-        </Typography>
-
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Recipient Blood Type</TableCell>
-                <TableCell>Compatible Donor Blood Types</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {Object.entries(compatibleBloodTypes).map(([recipient, donors]) => (
-                <TableRow key={recipient}>
-                  <TableCell>{recipient}</TableCell>
-                  <TableCell>{donors}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-
+        <Snackbar
+          open={toastOpen}
+          autoHideDuration={6000}
+          onClose={handleToastClose}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        >
+          <Alert onClose={handleToastClose} severity="error" sx={{ width: '100%' }}>
+            {toastMessage}
+          </Alert>
+        </Snackbar>
       </Box>
     </ThemeProvider>
   );
