@@ -7,7 +7,7 @@
   "scripts": {
     "backend": "nodemon ./backend/server.mjs",
     "server": "nodemon ./backend/server.mjs",
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
