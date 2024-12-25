@@ -2,9 +2,8 @@ import { useState, useEffect } from 'react';
 import {
   Switch, FormControlLabel, Box, Typography, Paper, TextField, Button, CssBaseline, ThemeProvider, createTheme, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 } from '@mui/material';
-import axios from 'axios';
 
-const vite_env = import.meta.env
+const vite_env = import.meta.env;
 import AesEncryption from "./privacy/aes_encryption.js";
 const aes = new AesEncryption(vite_env.VITE_API_CRYPTSEED + "F");
 
@@ -79,23 +78,32 @@ const BloodTypeToggle = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("bef", loginData.password);
     const { iv, encrypted } = await aes.encrypt(loginData.password);
     loginData.user_pass = encrypted;
     loginData.password = undefined;
-    console.log("dps", loginData.user_pass);
-    console.log("sel", selectedBloodTypes);
     const dataToSend = {
       iv,
       ...loginData,
       bloodTypes: selectedBloodTypes,
       tempo_atualizacao: Date.now()
     };
-    console.log(dataToSend);
-    console.log("oi");
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_BACKEND_ENDPOINT}?func=submit`, dataToSend);
-      console.log('Response:', response);
+      const response = await fetch(`${import.meta.env.VITE_API_BACKEND_ENDPOINT}?func=submit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Set the appropriate headers
+        },
+        body: JSON.stringify(dataToSend), // Convert the data to a JSON string
+      });
+
+      // Check if the response is successful
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      // Parse the response JSON
+      const responseData = await response.json();
+      console.log(responseData);
       alert("envio com sucesso");
     } catch (error) {
       if (error.status === 403) alert("senha errada");
@@ -173,6 +181,9 @@ const BloodTypeToggle = () => {
               variant="outlined"
               sx={{ marginTop: 2 }}
             />
+            <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ marginTop: 3 }}>
+              Submit
+            </Button>
           </Box>
 
           <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 3, marginTop: 3 }}>
@@ -221,9 +232,6 @@ const BloodTypeToggle = () => {
           </Table>
         </TableContainer>
 
-        <Button variant="contained" color="primary" onClick={handleSubmit} sx={{ marginTop: 3 }}>
-          Submit
-        </Button>
       </Box>
     </ThemeProvider>
   );

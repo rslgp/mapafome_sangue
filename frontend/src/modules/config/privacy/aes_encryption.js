@@ -1,5 +1,6 @@
+
 export default class AES256 {
-    constructor(secretKey) {
+    constructor(secretKey = import.meta.env.VITE_API_CRYPTSEED + "F") { // TODO: maybe use random secret key for each usage, and send it to server 
         if (!secretKey || secretKey.length < 32) {
             throw new Error("Key must be at least 32 characters (256 bits).");
         }
@@ -72,22 +73,22 @@ export default class AES256 {
     }
 }
 
-async function demo() {
-    const key = import.meta.env.VITE_API_CRYPTSEED + "F"; // 32 characters
-    console.log(key)
-    const aes = new AES256(key);
+// async function demo() {
+//     const key = import.meta.env.VITE_API_CRYPTSEED + "F"; // 32 characters
+//     console.log(key)
+//     const aes = new AES256(key);
 
-    const plaintext = "senha123";
-    console.log("Plaintext:", plaintext);
+//     const plaintext = "senha123";
+//     console.log("Plaintext:", plaintext);
 
-    // Encrypt
-    const { iv, encrypted } = await aes.encrypt(plaintext);
-    console.log("Encrypted:", encrypted);
-    console.log("IV:", iv);
+//     // Encrypt
+//     const { iv, encrypted } = await aes.encrypt(plaintext);
+//     console.log("Encrypted:", encrypted);
+//     console.log("IV:", iv);
 
-    // Decrypt
-    const decrypted = await aes.decrypt(encrypted, iv);
-    console.log("Decrypted:", decrypted);
-}
+//     // Decrypt
+//     const decrypted = await aes.decrypt(encrypted, iv);
+//     console.log("Decrypted:", decrypted);
+// }
 
-demo().catch(console.error);
+// demo().catch(console.error);

@@ -14,24 +14,23 @@
     "deploy": "npm run build && echo 'sangue.mapafome.com.br' > dist/CNAME && gh-pages -d dist"
   },
   "dependencies": {
-    "axios": "^1.7.9",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.3.0",
+    "@mui/material": "^6.3.0",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "fs": "^0.0.1-security",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-router-dom": "^7.1.1",
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.0",
-    "@mui/icons-material": "^6.3.0",
-    "@mui/material": "^6.3.0",
     "google-auth-library": "^9.15.0",
     "google-spreadsheet": "^4.1.4",
     "leaflet": "^1.9.4",
-    "react-leaflet": "^5.0.0"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-leaflet": "^5.0.0",
+    "react-router-dom": "^7.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
