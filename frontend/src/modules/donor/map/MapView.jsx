@@ -131,6 +131,25 @@ const App = () => {
                         label="Escolha o seu tipo de sangue (multipla escolha para grupos)"
                         onChange={handleBloodTypeChange}
                         sx={{ width: '100%' }}
+                        renderValue={(selected) => (
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                                {selected.map((value) => (
+                                    <Box
+                                        key={value}
+                                        sx={{
+                                            backgroundColor: 'primary.main',
+                                            color: 'white',
+                                            padding: '4px 8px',
+                                            borderRadius: '4px',
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        {value}
+                                    </Box>
+                                ))}
+                            </Box>
+                        )}
                     >
                         {bloodTypes.map(bloodType => (
                             <MenuItem key={bloodType} value={bloodType}>
@@ -140,6 +159,7 @@ const App = () => {
                         ))}
                     </Select>
                 </FormControl>
+
 
                 {loading ? (
                     <CircularProgress />
