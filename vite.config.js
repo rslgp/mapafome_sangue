@@ -7,7 +7,6 @@ export default defineConfig({
   plugins: [
     react(),
   ],
-  base: '/mapafome_sangue/',
   server: {
     port: 8080
   }

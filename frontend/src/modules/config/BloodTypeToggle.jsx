@@ -5,7 +5,7 @@ import {
 import axios from 'axios';
 
 const vite_env = import.meta.env
-import AesEncryption from "../../../_shared/util/aes_encryption";
+import AesEncryption from "./privacy/aes_encryption.js";
 const aes = new AesEncryption(vite_env.VITE_API_CRYPTSEED + "F");
 
 // Blood types and their corresponding hex colors
