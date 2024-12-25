@@ -124,11 +124,11 @@ const App = () => {
                 </Typography>
 
                 <FormControl fullWidth sx={{ marginBottom: '16px' }}>
-                    <InputLabel>Escolha o seu tipo de sangue, ou do grupo de doadores</InputLabel>
+                    <InputLabel>Escolha o seu tipo de sangue (multipla escolha para grupos)</InputLabel>
                     <Select
                         multiple
                         value={selectedBloodTypes}
-                        label="Escolha o seu tipo de sangue, ou do grupo de doadores"
+                        label="Escolha o seu tipo de sangue (multipla escolha para grupos)"
                         onChange={handleBloodTypeChange}
                         sx={{ width: '100%' }}
                     >
@@ -147,9 +147,11 @@ const App = () => {
                     <MapContainer
                         center={CENTER}
                         zoom={12}
-                        style={{ height: "500px", width: "100%" }}
+                        style={{ height: "80vh", width: "100vw" }}
                     >
-                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                        <TileLayer url="https://worldtiles1.waze.com/tiles/{z}/{x}/{y}.png"
+                            attribution=" &copy; <a href='https://www.waze.com/pt-BR/live-map' target='_blank' rel='noreferrer'>Waze</a>"
+                        />
                         {filteredMarkers.map((marker, index) => (
                             <Marker
                                 key={index}
@@ -157,10 +159,10 @@ const App = () => {
                                 icon={L.divIcon({
                                     className: 'bloodTypeMarker',
                                     html: `
-                                        <div style="position: relative; text-align: center;">
-                                            <span style="position: absolute; top: -25px; font-size: 12px; font-weight: bold; color: black;">
+                                        <div>
+                                            <div class="filtered-blood">
                                                 ${marker.missing_blood.join(' ')}
-                                            </span>
+                                            </div>
                                             <img src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png" style="width: 30px; height: 40px;" />
                                         </div>
                                     `
