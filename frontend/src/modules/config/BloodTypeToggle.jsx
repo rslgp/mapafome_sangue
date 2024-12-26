@@ -3,10 +3,6 @@ import {
   Switch, FormControlLabel, Box, Typography, Paper, TextField, Button, CssBaseline, ThemeProvider, createTheme, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Snackbar
 } from '@mui/material';
 
-const vite_env = import.meta.env;
-import AesEncryption from "./privacy/aes_encryption.js";
-const aes = new AesEncryption(vite_env.VITE_API_CRYPTSEED + "F");
-
 // Blood types and their corresponding hex colors
 const bloodTypes = [
   { type: 'A+', color: '#E69F00' },
@@ -80,11 +76,8 @@ const BloodTypeToggle = () => {
   };
 
   const handleSubmit = async () => {
-    const { iv, encrypted } = await aes.encrypt(loginData.password);
-    loginData.user_pass = encrypted;
-    loginData.password = undefined;
+    loginData.user_pass = loginData.password;
     const dataToSend = {
-      iv,
       ...loginData,
       bloodTypes: selectedBloodTypes,
       tempo_atualizacao: Date.now()

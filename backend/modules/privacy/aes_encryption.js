@@ -1,4 +1,3 @@
-import process from 'process';
 export default class AES256 {
     constructor(secretKey) {
         if (!secretKey || secretKey.length < 32) {
@@ -74,11 +73,11 @@ export default class AES256 {
 }
 
 async function demo() {
-    const key = process.env.VITE_API_CRYPTSEED + "F"; // 32 characters
+    const key = "2af790aa2ea83f941974d0f3ebdb3f4714912f31a19090237dff63ef4ed7011F"; // 32 characters
     console.log(key)
     const aes = new AES256(key);
 
-    const plaintext = "senha123";
+    const plaintext = "ascomfhb";
     console.log("Plaintext:", plaintext);
 
     // Encrypt

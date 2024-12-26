@@ -27,6 +27,18 @@ app.post('/submit', async (req, res, next) => {
         next(e);
     }
 });
+app.post('/', async (req, res, next) => {
+    const { func } = req.query;
+    if (func !== "submit") res.status(404).json({});
+    const { username, bloodTypes } = req.body;
+    try {
+        await GoogleSheetService.updateRow(username, bloodTypes, req.body);
+        res.status(200).json({ 'result': 'hi!' });
+    } catch (e) {
+        next(e);
+    }
+});
+
 
 app.get('/mapdata', async (req, res, next) => {
     const { } = req.body;
@@ -43,10 +55,10 @@ app.get('/mapdata', async (req, res, next) => {
 app.use(errorHandler);
 
 // Start the server
-// app.listen(port, () => {
-//     console.log(`Server is running at http://localhost:${port}`);
-// });
-const httpsServer = createHttpsServer(app);
-httpsServer.listen(port, () => {
-    console.log(`Server is running at https://localhost:${port}`);
+app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
 });
+// const httpsServer = createHttpsServer(app);
+// httpsServer.listen(port, () => {
+//     console.log(`Server is running at https://localhost:${port}`);
+// });
