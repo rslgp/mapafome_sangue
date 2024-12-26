@@ -99,7 +99,9 @@ const BloodTypeToggle = () => {
       // Parse the response JSON
       const responseData = await response.json();
       console.log(responseData);
-      alert("envio com sucesso");
+      setToastMessage('envio com sucesso');
+      setOpenToast(true);
+      // alert("envio com sucesso");
     } catch (error) {
       if (error.message.includes('403')) {
         setToastMessage('Senha errada!');
