@@ -38,7 +38,7 @@ const popupContentMake = (blood_row_array) => {
     };
 };
 const extractPathComponent = () => {
-    const urlPath = window.location.pathname;
+    const urlPath = window.location.hash.slice(1);
     const pathParts = urlPath.split('/');
 
     const pathComponentIndex = pathParts.findIndex(part => part === 'loc');
