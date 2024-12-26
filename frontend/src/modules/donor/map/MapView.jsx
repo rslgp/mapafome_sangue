@@ -5,9 +5,10 @@ import L from 'leaflet';
 import { Container, Typography, FormControl, InputLabel, Select, MenuItem, Box, Checkbox, ListItemText, CircularProgress } from '@mui/material';
 import getDateFormat from './util/date_formatter';
 
-const CENTER = [-8.0671132, -34.8766719];
+let CENTER = [-8.0671132, -34.8766719];
 const SERVER_ENDPOINT = `${import.meta.env.VITE_API_BACKEND_ENDPOINT}?func=mapdata`;
 const MAP_INDEX = 0;
+const PATH_INDEX = 11;
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -36,20 +37,45 @@ const popupContentMake = (blood_row_array) => {
         html_body,
     };
 };
+const extractPathComponent = () => {
+    const urlPath = window.location.pathname;
+    const pathParts = urlPath.split('/');
 
+    const pathComponentIndex = pathParts.findIndex(part => part === 'loc');
+    if (pathComponentIndex !== -1 && pathComponentIndex + 1 < pathParts.length) {
+        return pathParts[pathComponentIndex + 1];
+    } else {
+        return null; // Return null if the path component is not found
+    }
+};
 const loadFromServer = async () => {
     try {
         const fetch_res = await fetch(SERVER_ENDPOINT);
         const data = await fetch_res.json();
         const { rows } = data.result;
+
+        const pathComponent = extractPathComponent();
+
+        let matchedCenter = null;
+
         const markers = rows.map(r => {
-            const { missing_blood, html_body } = popupContentMake(r)
+            const { missing_blood, html_body } = popupContentMake(r);
+
+            if (pathComponent === r[PATH_INDEX]) { // Check for path match
+                matchedCenter = r[MAP_INDEX].split(","); // Update CENTER if there's a match
+            }
+
             return {
                 position: r[MAP_INDEX].split(","),
                 missing_blood: missing_blood,
                 popupContent: html_body,
             };
         });
+
+        if (matchedCenter) {
+            CENTER = matchedCenter; // Set CENTER if a match was found
+        }
+
         return markers;
     } catch (e) {
         console.log("error fetch", e);

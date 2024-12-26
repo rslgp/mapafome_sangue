@@ -16,7 +16,14 @@ app.use(express.json());
 
 // Simple route
 app.get('/', async (req, res, next) => {
-    res.send('Hello from Express!');
+    const { func } = req.query;
+    if (func !== "mapdata") res.status(404).json({});
+    try {
+        const rows = await GoogleSheetService.readRows();
+        res.status(200).json({ 'result': rows });
+    } catch (e) {
+        next(e);
+    }
 });
 app.post('/submit', async (req, res, next) => {
     const { username, bloodTypes } = req.body;
