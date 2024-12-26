@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Container, Typography, FormControl, InputLabel, Select, MenuItem, Box, Checkbox, ListItemText, CircularProgress } from '@mui/material';
@@ -26,12 +26,27 @@ const popupContentMake = (blood_row_array) => {
         if (blood_row_array[j] === "TRUE") result.push(bloodTypes[i]);
     }
 
-    const googleDirection = `https://www.google.com/maps/search/${blood_row_array[blood_row_array.length - 1]}`;
-    let html_body = `<a href=${googleDirection} target='_blank' rel="noreferrer">Ir para o destino
-    <img className="directionIcon" style="height:18px;width:18px" src="https://maps.gstatic.com/tactile/omnibox/directions-2x-20150909.png"></img></a> <br/>`;
-    html_body += result.join(" ");
+    const googleDirection = `https://www.google.com/maps/search/${blood_row_array[MAP_INDEX]}`;
+    let html_body = (
+        <div>
+            <a href={googleDirection} target='_blank' rel="noreferrer">
+                Ir para o destino <img src="https://maps.gstatic.com/tactile/omnibox/directions-2x-20150909.png" style={{ height: '18px', width: '18px' }} alt="Directions" />
+            </a>
+            <br />
+            {result.join(" ")}
+            <br />
+        </div>
+    );
     const att = getDateFormat(blood_row_array[blood_row_array.length - 1]);
-    if (att) html_body += `<br/> <span style="font-size:11px">${att}</span>`;
+    if (att) {
+        html_body = (
+            <div>
+                {html_body}
+                <span style={{ fontSize: '11px' }}>{att}</span>
+            </div>
+        );
+    }
+
     return {
         missing_blood: result,
         html_body,
@@ -213,12 +228,14 @@ const App = () => {
                                         </div>
                                     `
                                 })}
-                                eventHandlers={{
-                                    click: () => {
-                                        alert(marker.popupContent);
-                                    }
-                                }}
-                            />
+                            // eventHandlers={{
+                            //     click: () => {
+                            //         alert(marker.popupContent);
+                            //     }
+                            // }}
+                            >
+                                <Popup>{marker.popupContent}</Popup>
+                            </Marker>
                         ))}
                     </MapContainer>
                 )}
