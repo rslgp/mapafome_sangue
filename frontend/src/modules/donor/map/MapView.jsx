@@ -8,7 +8,9 @@ import getDateFormat from './util/date_formatter';
 let CENTER = [-8.0671132, -34.8766719];
 const SERVER_ENDPOINT = `${import.meta.env.VITE_API_BACKEND_ENDPOINT}?func=mapdata`;
 const MAP_INDEX = 0;
+const TIME_INDEX = 10;
 const PATH_INDEX = 11;
+const URL_INDEX = 12;
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -35,9 +37,22 @@ const popupContentMake = (blood_row_array) => {
             <br />
             {result.join(" ")}
             <br />
-        </div>
+        </div >
     );
-    const att = getDateFormat(blood_row_array[blood_row_array.length - 1]);
+    if (blood_row_array[URL_INDEX]) {
+        console.log(blood_row_array[URL_INDEX]);
+        html_body = (
+            <div>
+                {html_body}
+
+                <a href={blood_row_array[URL_INDEX]} target='_blank' rel="noreferrer">
+                    estoque
+                </a>
+            </div>
+        )
+    }
+
+    const att = getDateFormat(blood_row_array[TIME_INDEX]);
     if (att) {
         html_body = (
             <div>
