@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Container, Typography, FormControl, InputLabel, Select, MenuItem, Box, Checkbox, ListItemText, CircularProgress } from '@mui/material';
 import getDateFormat from './util/date_formatter';
+import LinkList from './util/LinkList';
 
 let CENTER = [-8.0671132, -34.8766719];
 const SERVER_ENDPOINT = `${import.meta.env.VITE_API_BACKEND_ENDPOINT}?func=mapdata`;
@@ -28,6 +29,25 @@ const popupContentMake = (blood_row_array) => {
         if (blood_row_array[j] === "TRUE") result.push(bloodTypes[i]);
     }
 
+
+    let link_estoque =
+        blood_row_array[URL_INDEX] ? (
+            <a href={blood_row_array[URL_INDEX]} target='_blank' rel="noreferrer">
+                estoque
+            </a>
+        ) : <></>;
+
+    let link_mapafome =
+        blood_row_array[PATH_INDEX] ?
+            (
+                <a href={`https://sangue.mapafome.com.br/#/loc/${blood_row_array[PATH_INDEX]}`} target='_blank' rel="noreferrer">
+                    compartilhe
+                </a>
+            ) : <></>;
+    let links = [
+        { text: "estoque", url: blood_row_array[URL_INDEX] },
+        { text: "compartilhe", url: `https://sangue.mapafome.com.br/#/loc/${blood_row_array[PATH_INDEX]}` }
+    ];
     const googleDirection = `https://www.google.com/maps/search/${blood_row_array[MAP_INDEX]}`;
     let html_body = (
         <div>
@@ -37,20 +57,11 @@ const popupContentMake = (blood_row_array) => {
             <br />
             {result.join(" ")}
             <br />
+            <div>
+                <LinkList links={links} delimiter={"|"}></LinkList>
+            </div>
         </div >
     );
-    if (blood_row_array[URL_INDEX]) {
-        console.log(blood_row_array[URL_INDEX]);
-        html_body = (
-            <div>
-                {html_body}
-
-                <a href={blood_row_array[URL_INDEX]} target='_blank' rel="noreferrer">
-                    estoque
-                </a>
-            </div>
-        )
-    }
 
     const att = getDateFormat(blood_row_array[TIME_INDEX]);
     if (att) {
