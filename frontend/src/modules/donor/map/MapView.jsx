@@ -29,21 +29,6 @@ const popupContentMake = (blood_row_array) => {
         if (blood_row_array[j] === "TRUE") result.push(bloodTypes[i]);
     }
 
-
-    let link_estoque =
-        blood_row_array[URL_INDEX] ? (
-            <a href={blood_row_array[URL_INDEX]} target='_blank' rel="noreferrer">
-                estoque
-            </a>
-        ) : <></>;
-
-    let link_mapafome =
-        blood_row_array[PATH_INDEX] ?
-            (
-                <a href={`https://sangue.mapafome.com.br/#/loc/${blood_row_array[PATH_INDEX]}`} target='_blank' rel="noreferrer">
-                    compartilhe
-                </a>
-            ) : <></>;
     let links = [
         { text: "estoque", url: blood_row_array[URL_INDEX] },
         { text: "compartilhe", url: `https://sangue.mapafome.com.br/#/loc/${blood_row_array[PATH_INDEX]}` }
@@ -187,7 +172,9 @@ const App = () => {
         <Container maxWidth="lg" sx={{ padding: { xs: '8px', sm: '16px' } }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <Typography variant="h4" sx={{ marginBottom: '16px', fontSize: { xs: '1.5rem', sm: '2rem' } }}>
-                    Blood Donation Map
+
+                    <LinkList links={[{ text: "MapaFome Sangue", url: "/#/" }, { text: "Cadastro", url: "https://docs.google.com/forms/d/e/1FAIpQLSftHYwJhst3miKoUd1YmYGh2ArFKuD8P2woQEnDDPOmjBt3bA/viewform?usp=dialog" }]} delimiter={" | "}></LinkList>
+
                 </Typography>
 
                 <FormControl fullWidth sx={{ marginBottom: '16px' }}>
