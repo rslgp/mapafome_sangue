@@ -70,7 +70,15 @@ class GoogleSheetService {
 
         return { headers: json_keys, rows: json_values };
     }
-
+    
+    rowToJSON(row) {
+        const formattedRow = {};
+        row._worksheet._headerValues.forEach((header, index) => {
+            formattedRow[header] = row._rawData[index];
+        });
+        return formattedRow;
+    }
+    
     async readFilteredRow(filterColumn, filterValue, sheet_index = 0) {
         // Get the specific sheet by index
         const sheet = await this.accessSheet(sheet_index);
