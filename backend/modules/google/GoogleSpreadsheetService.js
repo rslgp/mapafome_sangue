@@ -20,7 +20,7 @@ class GoogleSheetService {
     // The static instance will hold the singleton instance of the class
     // static instance;
 
-    constructor() {
+    constructor(sheetID = '1ZLmQ4vw5-PcQgdQuzVcqwjw4CwPvQUo8nfhaWH3UJi4') {
         // if (GoogleSheetService.instance) {
         //     return GoogleSheetService.instance;
         // }
@@ -28,7 +28,7 @@ class GoogleSheetService {
         // Singleton pattern: initialize the instance only once
         // GoogleSheetService.instance = this;
 
-        this.setup('1ZLmQ4vw5-PcQgdQuzVcqwjw4CwPvQUo8nfhaWH3UJi4')
+        this.setup(sheetID)
     }
 
     // Set up and authenticate the Google Spreadsheet
@@ -69,6 +69,21 @@ class GoogleSheetService {
         console.log("struct read", json_row);
 
         return { headers: json_keys, rows: json_values };
+    }
+
+    async readFilteredRow(filterColumn, filterValue, sheet_index = 0) {
+        // Get the specific sheet by index
+        const sheet = await this.accessSheet(sheet_index);
+
+        // Load all rows (you can also use `sheet.getRows()` for more control)
+        const rows = await sheet.getRows();
+
+        const filterColumnIndex = sheet.headerValues.indexOf(filterColumn);
+        // Filter rows based on the specified column and value
+        const filteredRows = rows.filter(row => row._rawData[filterColumnIndex] === filterValue);
+
+        // Return the filtered rows
+        return filteredRows;
     }
 
     // UPDATE - Update an existing row (based on a column value)
@@ -115,14 +130,30 @@ class GoogleSheetService {
 
     // DELETE - Delete a row based on a condition
     async deleteRow(filterValue) {
-        const sheet = await this.accessSheet();
-        const rows = await sheet.getRows();
-        const row = rows.find(r => r.username === filterValue); // Assuming 'username' is the unique identifier
+        await this.deleteRow("username", filterValue);
+    }
+
+    async deleteRow(filterColumn, filterValue, sheet_index = 0) {
+        const rows = await this.readFilteredRow(filterColumn, filterValue, sheet_index);
+        const row = rows[0];
         if (row) {
             await row.delete();
             console.log('Row deleted:', row);
         } else {
             console.log('Row not found.');
+        }
+    }
+    
+
+    async deleteAllRow(filterColumn, filterValue, sheet_index = 0) {
+        const rows = await this.readFilteredRow(filterColumn, filterValue, sheet_index);
+        for (const row of rows) {
+            if (row) {
+                await row.delete();
+                console.log('Row deleted:', row);
+            } else {
+                console.log('Row not found.');
+            }
         }
     }
 }
